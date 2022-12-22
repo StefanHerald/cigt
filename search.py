@@ -165,7 +165,7 @@ def uniformCostSearch(problem: SearchProblem):
                         break 
                 
 
-   
+  
 
 def nullHeuristic(state, problem=None):
     """
@@ -175,11 +175,42 @@ def nullHeuristic(state, problem=None):
     return 0
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
+    """Search the node that has the lowest comIbined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    from util import PriorityQueue
+    initial = problem.getStartState()
+    if problem.isGoalState(initial) :
+        return []
+    pathCost = PriorityQueue()
+    pathCost.push((initial, []), heuristic(initial, problem))
+    noRepeats = []
+    while True :
+        if pathCost.isEmpty() :
+            return []
+        
+        prob, path = pathCost.pop()
+        noRepeats.append(prob)
 
+        if problem.isGoalState(prob) :
+            return path
+        
+        successors = problem.getSuccessors(prob)
 
+        for succ in successors :
+            deeperPath = path + [succ[1]]
+            if succ[0] not in noRepeats :
+                pathCost.push((succ[0], deeperPath), problem.getCostOfActions(deeperPath) + heuristic(succ[0], problem))
+
+            else :
+                #if it is in repeats, see if newer path is cheaper
+                for item in pathCost.heap :
+                    if item[0] == succ[0] :
+                        old = problem.getCostOfActions(item[1]) + heuristic(item[0], problem)
+                        new = problem.getCostOfActions(deeperPath) + heuristic (succ[0], problem)
+
+                        if new < old :
+                            pathCost.update((succ[0], deeperPath), new)
+                        break 
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
