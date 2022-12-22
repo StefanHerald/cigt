@@ -73,28 +73,34 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem: SearchProblem):
-    """
-    Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
     "*** YOUR CODE HERE ***"
 
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
+    from util import Queue
+    bfsQueue = Queue()
 
-    util.raiseNotDefined()
+    visited = [] 
+    path = [] 
+
+    bfsQueue.push((problem.getStartState(),[]))
+
+    hasAnswer = False
+    while(not hasAnswer):
+        loc,path = bfsQueue.pop()
+        visited.append(loc)
+        if problem.isGoalState(loc):
+            return path
+        nextRow = problem.getSuccessors(loc)
+        for item in nextRow:
+            if item[0] not in visited:
+                newPath = path + [item[1]] 
+                bfsQueue.push((item[0],newPath))
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
