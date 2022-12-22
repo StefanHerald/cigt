@@ -341,7 +341,14 @@ class CornersProblem(search.SearchProblem):
                 ul, dl, ur, dr = self.corners
                 #due to my inexperience with python, this is the best solution I could find
                 #My apologies for this code
-                upLeft, downLeft, upRight, downRight = ul == newPos, dl == newPos, ur == newPos, dr == newPos
+                if ul == newPos :
+                    upLeft = True
+                if dl == newPos :
+                    downLeft = True
+                if ur == newPos :
+                    upRight = True
+                if dr == newPos :
+                    downRight = True
 
                 newState =  (upLeft , downLeft , upRight , downRight , newPos)
                 successors.append([newState, action, 1])
