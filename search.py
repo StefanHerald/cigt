@@ -101,16 +101,14 @@ def uniformCostSearch(problem: SearchProblem):
     "*** YOUR CODE HERE ***"
     from util import PriorityQueue
     initial = problem.getStartState()
-    
     if problem.isGoalState(initial) :
         return []
-
     itemsCostPaths = PriorityQueue()
     noRepeats = []
     itemsCostPaths.push((initial, []), 0)
-    while (True):
 
-        if itemsCostPaths.isEmpty:
+    while (True):
+        if itemsCostPaths.isEmpty():
             return []
 
         prob, path = itemsCostPaths.pop()
@@ -118,7 +116,7 @@ def uniformCostSearch(problem: SearchProblem):
         if(problem.isGoalState(prob)):
             return path
 
-        successors = problem.getSuccessors(probPath[0])
+        successors = problem.getSuccessors(prob)
 
         for succ in successors:
             deeperPath = path + [succ[1]]
@@ -131,10 +129,11 @@ def uniformCostSearch(problem: SearchProblem):
                 for item in itemsCostPaths.heap :
                     if item[0] == succ[0] :
                         old = problem.getCostOfActions(item[1])
-                    new = problem.getCostOfActions(deeperPath)
-                    if new < old :
-                        itemsCostPaths.update((succ[0], deeperPath), new)
-        
+                        new = problem.getCostOfActions(deeperPath)
+                        if new < old :
+                            itemsCostPaths.update((succ[0], deeperPath), new)
+                        break 
+                
 
    
 
