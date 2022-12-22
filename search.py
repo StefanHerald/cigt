@@ -124,6 +124,7 @@ def depthFirstSearch(problem: SearchProblem):
             if item[0] not in visited:
                 newPath = path + [item[1]] 
                 dfsStack.push((item[0],newPath))
+    return []
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
