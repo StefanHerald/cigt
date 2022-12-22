@@ -85,22 +85,22 @@ def breadthFirstSearch(problem: SearchProblem):
     from util import Queue
     bfsQueue = Queue()
 
-    visited = [] 
+    noRepeats = [] 
     path = [] 
 
     bfsQueue.push((problem.getStartState(),[]))
 
-    hasAnswer = False
-    while(not hasAnswer):
+    while(not bfsQueue.isEmpty()):
         loc,path = bfsQueue.pop()
-        visited.append(loc)
+        noRepeats.append(loc)
         if problem.isGoalState(loc):
             return path
         nextRow = problem.getSuccessors(loc)
         for item in nextRow:
-            if item[0] not in visited:
+            if item[0] not in noRepeats:
                 newPath = path + [item[1]] 
                 bfsQueue.push((item[0],newPath))
+    return []
 
 def depthFirstSearch(problem: SearchProblem):
     """Search the deepest nodes in the search tree first."""
