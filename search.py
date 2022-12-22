@@ -102,6 +102,29 @@ def breadthFirstSearch(problem: SearchProblem):
                 newPath = path + [item[1]] 
                 bfsQueue.push((item[0],newPath))
 
+def depthFirstSearch(problem: SearchProblem):
+    """Search the deepest nodes in the search tree first."""
+    from util import Stack
+
+    dfsStack = Stack()
+
+    visited = []
+    path = []
+
+    dfsStack.push((problem.getStartState(),[]))
+
+    hasAnswer = False
+    while(not hasAnswer):
+        loc,path = dfsStack.pop()
+        visited.append(loc)
+        if problem.isGoalState(loc):
+            return path
+        nextLevel = problem.getSuccessors(loc)
+        for item in nextLevel:
+            if item[0] not in visited:
+                newPath = path + [item[1]] 
+                dfsStack.push((item[0],newPath))
+
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
