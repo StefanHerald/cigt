@@ -98,6 +98,7 @@ def breadthFirstSearch(problem: SearchProblem):
         nextRow = problem.getSuccessors(loc)
         for item in nextRow:
             if item[0] not in noRepeats:
+                noRepeats.append(item[0])
                 newPath = path + [item[1]] 
                 bfsQueue.push((item[0],newPath))
     return []
@@ -152,6 +153,7 @@ def uniformCostSearch(problem: SearchProblem):
             deeperPath = path + [succ[1]]
 
             if succ[0] not in noRepeats :
+                noRepeats.append(succ[0])
                 itemsCostPaths.push((succ[0], deeperPath), problem.getCostOfActions(deeperPath))
 
             else :
@@ -199,6 +201,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
         for succ in successors :
             deeperPath = path + [succ[1]]
             if succ[0] not in noRepeats :
+                noRepeats.append(succ[0])
                 pathCost.push((succ[0], deeperPath), problem.getCostOfActions(deeperPath) + heuristic(succ[0], problem))
 
             else :

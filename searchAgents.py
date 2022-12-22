@@ -334,24 +334,21 @@ class CornersProblem(search.SearchProblem):
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
-            if hitsWall == True :
-                continue
-            else :
+            if not hitsWall :
                 newPos = (nextx, nexty)
                 ul, dl, ur, dr = self.corners
-                #due to my inexperience with python, this is the best solution I could find
-                #My apologies for this code
-                if ul == newPos :
-                    upLeft = True
-                if dl == newPos :
-                    downLeft = True
-                if ur == newPos :
-                    upRight = True
-                if dr == newPos :
-                    downRight = True
+                upL, upR, downR, downL = False, False, False, False
+                if  upLeft or ul == newPos:
+                    upL = True
+                if  downLeft or dl == newPos:
+                    downL = True
+                if  upRight or ur == newPos:
+                    upR = True
+                if  downRight or dr == newPos:
+                    downR = True
 
-                newState =  (upLeft , downLeft , upRight , downRight , newPos)
-                successors.append([newState, action, 1])
+                newState =  (upL , downL , upR , downR , newPos)
+                successors.append((newState, action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
