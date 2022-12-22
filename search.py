@@ -87,18 +87,56 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    "NO"
-    util.raiseNotDefined()
+    from util import PriorityQueue
+    initial = problem.getStartState()
+    
+    if problem.isGoalState(initial) :
+        return []
+
+    itemsCostPaths = PriorityQueue()
+    noRepeats = []
+    itemsCostPaths.push((initial, []), 0)
+    while (True):
+
+        if itemsCostPaths.isEmpty:
+            return []
+
+        prob, path = itemsCostPaths.pop()
+        noRepeats.append(prob)
+        if(problem.isGoalState(prob)):
+            return path
+
+        successors = problem.getSuccessors(probPath[0])
+
+        for succ in successors:
+            deeperPath = path + [succ[1]]
+
+            if succ[0] not in noRepeats :
+                itemsCostPaths.push((succ[0], deeperPath), problem.getCostOfActions(deeperPath))
+
+            else :
+                #if it is in repeats, see if newer path is cheaper
+                for item in itemsCostPaths.heap :
+                    if item[0] == succ[0] :
+                        old = problem.getCostOfActions(item[1])
+                    new = problem.getCostOfActions(deeperPath)
+                    if new < old :
+                        itemsCostPaths.update((succ[0], deeperPath), new)
+        
+
+   
 
 def nullHeuristic(state, problem=None):
     """
