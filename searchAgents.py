@@ -298,7 +298,7 @@ class CornersProblem(search.SearchProblem):
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
+        # returns all the starting positions
         upLeft, downLeft, upRight, downRight = (False, False, False, False)
         return (upLeft, downLeft, upRight, downRight, self.startingPosition) 
 
@@ -306,8 +306,7 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
-        #there still is food in the 4 corners, it is not a goal
+        # there still is food in the 4 corners, it is not a goal
         upLeft, downLeft, upRight, downRight, pos = state
         return(upLeft and downLeft and upRight and downRight)
             
@@ -384,6 +383,8 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
+    # sets a heuristic value for each position in the maze depending on Pacman's distance from it: default is zero in this case
+    # this value is the difference between the horizontal positions added to the difference between the vertical positions
     value = 0
     ul, dl, ur, dr, pos = state
     if not ul :

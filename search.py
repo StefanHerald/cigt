@@ -72,92 +72,85 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def depthFirstSearch(problem: SearchProblem):
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    "*** YOUR CODE HERE ***"
-
-    util.raiseNotDefined()
-
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     from util import Queue
     bfsQueue = Queue()
 
-    noRepeats = [] 
-    path = [] 
+    noRepeats = [] # lists all nodes that have already been visited
+    path = [] # holds the correct path, which is pushed to the queue
 
     bfsQueue.push((problem.getStartState(),[]))
 
+    """Main search loop that keeps adding nodes to the queue until a goal path has been found."""
     while(not bfsQueue.isEmpty()):
-        loc,path = bfsQueue.pop()
-        noRepeats.append(loc)
+        loc,path = bfsQueue.pop() # pull the first-pushed entry in the queue (the shallowest node in the search tree)
+        noRepeats.append(loc) # this location won't be used again
         if problem.isGoalState(loc):
-            return path
-        nextRow = problem.getSuccessors(loc)
-        for item in nextRow:
-            if item[0] not in noRepeats:
+            return path # at the goal? return the path and stop searching
+        """Everything below happens if a goal path has not yet been found: the loop restarts afterwards."""
+        nextRow = problem.getSuccessors(loc) # search the next level of possible paths from the location taken from the queue
+        for item in nextRow: # check for every possible next move
+            if item[0] not in noRepeats: # only if it has not yet been searched, of course
                 noRepeats.append(item[0])
                 newPath = path + [item[1]] 
-                bfsQueue.push((item[0],newPath))
+                bfsQueue.push((item[0],newPath)) # push the resulting node to the queue
     return []
 
 def depthFirstSearch(problem: SearchProblem):
     """Search the deepest nodes in the search tree first."""
     from util import Stack
-
     dfsStack = Stack()
 
-    visited = []
-    path = []
+    noRepeats = [] # lists all nodes that have already been visited
+    path = [] # holds the correct path, which is pushed to the stack
 
     dfsStack.push((problem.getStartState(),[]))
 
-    hasAnswer = False
-    while(not hasAnswer):
-        loc,path = dfsStack.pop()
-        visited.append(loc)
-        if problem.isGoalState(loc):
-            return path
-        nextLevel = problem.getSuccessors(loc)
-        for item in nextLevel:
-            if item[0] not in visited:
+    """Main search loop that keeps adding nodes to the stack until a goal path has been found."""
+    while(not dfsStack.isEmpty()):
+        loc,path = dfsStack.pop() # pop the last pushed entry in the stack (the deepest node in the search tree)
+        noRepeats.append(loc) # this location won't be used again
+        if problem.isGoalState(loc): 
+            return path # at the goal? return the path and stop searching
+        """Everything below happens if a goal path has not yet been found: the loop restarts afterwards."""
+        nextLevel = problem.getSuccessors(loc) # search the next level of possible paths from the location taken from the stack
+        for item in nextLevel: # check for every possible next move
+            if item[0] not in noRepeats: # only if it has not yet been searched, of course
                 newPath = path + [item[1]] 
-                dfsStack.push((item[0],newPath))
+                dfsStack.push((item[0],newPath)) # push the resulting node to the stack
     return []
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
     from util import PriorityQueue
     initial = problem.getStartState()
     if problem.isGoalState(initial) :
-        return []
+        return [] # at the goal already? then there is no need to search
     itemsCostPaths = PriorityQueue()
-    noRepeats = []
+    noRepeats = [] # lists all nodes that have already been visited
     itemsCostPaths.push((initial, []), 0)
 
     while (True):
         if itemsCostPaths.isEmpty():
             return []
 
-        prob, path = itemsCostPaths.pop()
-        noRepeats.append(prob)
+        prob, path = itemsCostPaths.pop() # pull the first-pushed entry from the queue
+        noRepeats.append(prob) # this location won't be used again
         if(problem.isGoalState(prob)):
-            return path
+            return path # at the goal? return the path and stop searching
 
         successors = problem.getSuccessors(prob)
 
         for succ in successors:
-            deeperPath = path + [succ[1]]
+            deeperPath = path + [succ[1]] # if a path is found for a child, it's also added to the original path
 
             if succ[0] not in noRepeats :
-                noRepeats.append(succ[0])
+                noRepeats.append(succ[0]) # this successor won't be visited again
                 itemsCostPaths.push((succ[0], deeperPath), problem.getCostOfActions(deeperPath))
 
             else :
-                #if it is in repeats, see if newer path is cheaper
+                # if it is in repeats, see if a newer path is cheaper
                 for item in itemsCostPaths.heap :
                     if item[0] == succ[0] :
                         old = problem.getCostOfActions(item[1])
@@ -178,25 +171,24 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest comIbined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
     from util import PriorityQueue
     initial = problem.getStartState()
     if problem.isGoalState(initial) :
-        return []
+        return [] # at the goal already? then there is no need to search
     pathCost = PriorityQueue()
     pathCost.push((initial, []), heuristic(initial, problem))
-    noRepeats = []
+    noRepeats = [] # lists all nodes that have already been visited
     while True :
         if pathCost.isEmpty() :
             return []
         
-        prob, path = pathCost.pop()
-        noRepeats.append(prob)
+        prob, path = pathCost.pop() # pull the first-pushed entry from the queue
+        noRepeats.append(prob) # this location won't be used again
 
-        if problem.isGoalState(prob) :
-            return path
+        if problem.isGoalState(prob) : 
+            return path # at the goal? return the path and stop searching
         
-        successors = problem.getSuccessors(prob)
+        successors = problem.getSuccessors(prob) # look for all successor nodes for the current node
 
         for succ in successors :
             deeperPath = path + [succ[1]]
@@ -205,7 +197,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
                 pathCost.push((succ[0], deeperPath), problem.getCostOfActions(deeperPath) + heuristic(succ[0], problem))
 
             else :
-                #if it is in repeats, see if newer path is cheaper
+                #if it is in repeats, see if a newer path is cheaper
                 for item in pathCost.heap :
                     if item[0] == succ[0] :
                         old = problem.getCostOfActions(item[1]) + heuristic(item[0], problem)
